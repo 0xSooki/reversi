@@ -8,21 +8,26 @@ namespace Persistence
 {
     public class ReversiTable
     {
-        private Int32[,] fieldValues;
+
+        #region fields
+
+        private Int32[,] board;
+
+        #endregion
 
         #region properties
         public Boolean IsFilled
         {
             get
             {
-                foreach (Int32 value in fieldValues)
+                foreach (Int32 value in board)
                     if (value == 0)
                         return false;
                 return true;
             }
         }
 
-        public Int32 Size { get { return fieldValues.Length; } }
+        public Int32 Size { get { return board.GetLength(0); } }
 
         public Int32 this[Int32 x, Int32 y] { get { return GetValue(x, y); } }
         #endregion
@@ -32,11 +37,11 @@ namespace Persistence
         public ReversiTable() : this(20) { }
         public ReversiTable(Int32 size)
         {
-            fieldValues = new Int32[size, size];
-            fieldValues[size / 2 - 1, size / 2 - 1] = 1;
-            fieldValues[size / 2, size / 2] = 1;
-            fieldValues[size / 2 - 1, size / 2] = 2;
-            fieldValues[size / 2, size / 2 - 1] = 2;
+            board = new Int32[size, size];
+            board[size / 2 - 1, size / 2 - 1] = 1;
+            board[size / 2, size / 2] = 1;
+            board[size / 2 - 1, size / 2] = 2;
+            board[size / 2, size / 2 - 1] = 2;
         }
 
         #endregion
@@ -44,21 +49,21 @@ namespace Persistence
         #region public methods
         public Int32 GetValue(Int32 x, Int32 y)
         {
-            if (x < 0 || x >= fieldValues.Length)
+            if (x < 0 || x >= board.Length)
                 throw new ArgumentOutOfRangeException(nameof(x), "The X coordinate is out of range.");
-            if (y < 0 || y >= fieldValues.Length)
+            if (y < 0 || y >= board.Length)
                 throw new ArgumentOutOfRangeException(nameof(y), "The Y coordinate is out of range.");
-            return fieldValues[x, y];
+            return board[x, y];
         }
 
         public void SetValue(Int32 x, Int32 y, Int32 value)
         {
-            if (x < 0 || x >= fieldValues.Length)
+            if (x < 0 || x >= board.Length)
                 throw new ArgumentOutOfRangeException(nameof(x), "The X coordinate is out of range.");
-            if (y < 0 || y >= fieldValues.Length)
+            if (y < 0 || y >= board.Length)
                 throw new ArgumentOutOfRangeException(nameof(y), "The Y coordinate is out of range.");
 
-            fieldValues[x, y] = value;
+            board[x, y] = value;
         }
 
         #endregion
@@ -72,7 +77,7 @@ namespace Persistence
 
         private Boolean GameOver()
         {
-            
+            return true;
         }
 
         #endregion

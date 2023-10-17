@@ -10,9 +10,15 @@ namespace Model
     public enum BoardSize { Smol, Medium, Big }
     public class ReversiGameModel
     {
+        #region consts
+
         private const Int32 FieldCountSmol = 10;
         private const Int32 FieldCountMedium = 20;
         private const Int32 FieldCountBig = 30;
+
+        #endregion
+
+        #region fields
 
         private ReversiTable table;
         private IReversiDataAccess dataAccess;
@@ -20,6 +26,8 @@ namespace Model
         private Int32 currentPlayer;
         private Int32 gameTime;
         private Int32 turnCount;
+
+        #endregion
 
         #region properties
 
@@ -46,12 +54,14 @@ namespace Model
 
         public BoardSize BoardSize
         {
-            get { return boardSize; } set { boardSize = value; }    
+            get { return boardSize; } set { boardSize = value; }
         }
 
         #endregion
 
         #region events
+
+        public event EventHandler<ReversiFieldEventArgs>? FieldChanged;
 
         public event EventHandler<ReversiEventArgs>? GameOver;
 
@@ -85,7 +95,7 @@ namespace Model
                 case BoardSize.Big:
                     table = new ReversiTable(FieldCountBig);
                     break;
-                default:    
+                default:
                     table = new ReversiTable(FieldCountMedium);
                     break;
             }
@@ -100,6 +110,30 @@ namespace Model
                     GameOver(this, new ReversiEventArgs(false, gameTime, turnCount));
                 }
             }
+        }
+
+        public void Step(Int32 x, Int32 y)
+        {
+            table.SetValue(x, y, currentPlayer);
+            OnFieldChanged(x, y);
+
+            turnCount++;
+            OnGameAdvanced();
+        }
+
+        #endregion
+
+        #region private event methods
+
+
+        private void OnFieldChanged(Int32 x, Int32 y)
+        {
+            FieldChanged?.Invoke(this, new ReversiFieldEventArgs(x, y));
+        }
+
+        private void OnGameAdvanced()
+        {
+            GameAdvanced?.Invoke(this, new ReversiEventArgs(false, turnCount, gameTime));
         }
 
         #endregion

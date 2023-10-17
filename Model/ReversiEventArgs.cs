@@ -18,5 +18,7 @@ namespace Model
             isWon = _isWon;
             turnCount = _turnCount;
         }
+
+
     }
 }

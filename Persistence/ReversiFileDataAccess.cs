@@ -8,14 +8,58 @@ namespace Persistence
 {
     public class ReversiFileDataAccess : IReversiDataAccess
     {
-        Task<ReversiTable> IReversiDataAccess.LoadAsync(string path)
+        public async Task<ReversiTable> LoadAsync(String path)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    String line = await reader.ReadLineAsync() ?? String.Empty;
+                    String[] numbers = line.Split(' ');
+                    Int32 tableSize = Int32.Parse(numbers[0]);
+                    ReversiTable table = new ReversiTable(tableSize);
+
+                    for (Int32 i = 0; i < tableSize; i++)
+                    {
+                        line = await reader.ReadLineAsync() ?? String.Empty;
+                        numbers = line.Split(' ');
+
+                        for (Int32 j = 0; j < tableSize; j++)
+                        {
+                            table.SetValue(i, j, Int32.Parse(numbers[j]));
+                        }
+                    }
+
+                    return table;
+                }
+            }
+            catch
+            {
+                throw new ReversiDataException();
+            }
         }
 
-        Task IReversiDataAccess.SaveAsync(string path, ReversiTable table)
+        public async Task SaveAsync(String path, ReversiTable table)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    writer.Write(table.Size);
+                    for (Int32 i = 0; i < table.Size; i++)
+                    {
+                        for (Int32 j = 0; j < table.Size; j++)
+                        {
+                            await writer.WriteAsync(table[i, j] + " ");
+                        }
+                        await writer.WriteLineAsync();
+                    }
+                }
+            }
+            catch
+            {
+                throw new ReversiDataException();
+            }
         }
     }
 }
