@@ -4,6 +4,7 @@ namespace Model
 {
     public class ReversiEventArgs : EventArgs
     {
+        private (Int32, Int32) playerTimes = (0, 0);
         private Int32 gameTime;
         private Boolean isWon;
         private Int32 turnCount;

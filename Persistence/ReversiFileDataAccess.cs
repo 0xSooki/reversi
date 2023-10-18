@@ -45,7 +45,7 @@ namespace Persistence
             {
                 using (StreamWriter writer = new StreamWriter(path))
                 {
-                    writer.Write(table.Size);
+                    writer.WriteLine(table.Size);
                     for (Int32 i = 0; i < table.Size; i++)
                     {
                         for (Int32 j = 0; j < table.Size; j++)

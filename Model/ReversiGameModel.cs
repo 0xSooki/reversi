@@ -25,6 +25,9 @@ namespace Model
         private BoardSize boardSize;
         private Int32 currentPlayer;
         private Int32 gameTime;
+        private Int32 player1Time;
+        private Int32 player2Time;
+
         private Int32 turnCount;
 
         #endregion
@@ -114,11 +117,87 @@ namespace Model
 
         public void Step(Int32 x, Int32 y)
         {
+
+            if (table[x, y] != 0)
+            {
+                return;
+            }
+
+            if (GameOver != null)
+            {
+                   if (table.IsFilled)
+                {
+                    GameOver(this, new ReversiEventArgs(false, gameTime, turnCount));
+                }
+            }
+
+            List<(Int32, Int32)> validMoves = table.GetValidMoves(currentPlayer);
+            if (!validMoves.Contains((x, y)))
+            {
+                return;
+            }
+
             table.SetValue(x, y, currentPlayer);
             OnFieldChanged(x, y);
 
+            List<(int, int)> values = table.FindPiecesToFlip(x, y, currentPlayer);
+            table.Flip(values, currentPlayer);
+
+            foreach ((int, int) value in values)
+            {
+                OnFieldChanged(value.Item1, value.Item2);
+            }
+
+
+            
+
+            if (currentPlayer == 1 && table.CanPlayValidMove(2))
+            {
+                currentPlayer = 2;
+            }
+            else if (currentPlayer == 2 && table.CanPlayValidMove(1))
+            {
+                currentPlayer = 1;
+            } else {                 if (GameOver != null)
+                {
+                    GameOver(this, new ReversiEventArgs(false, gameTime, currentPlayer));
+                }
+            }
             turnCount++;
+
+
+
             OnGameAdvanced();
+        }
+
+        public async Task SaveGameAsync(String path)
+        {
+            if (dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+
+            await dataAccess.SaveAsync(path, table);
+        }
+
+        public async Task LoadGameAsync(String path)
+        {
+            if (dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+
+            table = await dataAccess.LoadAsync(path);
+
+
+            switch (BoardSize)
+            {
+                case BoardSize.Smol:
+                    boardSize = BoardSize.Smol;
+                    break;
+                case BoardSize.Medium:
+                    boardSize = BoardSize.Medium;
+                    break;
+                case BoardSize.Big:
+                    boardSize = BoardSize.Big;
+                    break;
+            }
         }
 
         #endregion
@@ -133,7 +212,7 @@ namespace Model
 
         private void OnGameAdvanced()
         {
-            GameAdvanced?.Invoke(this, new ReversiEventArgs(false, turnCount, gameTime));
+            GameAdvanced?.Invoke(this, new ReversiEventArgs(false, gameTime, currentPlayer));
         }
 
         #endregion

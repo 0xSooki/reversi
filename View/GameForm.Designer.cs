@@ -30,13 +30,13 @@
         {
             menuStrip1 = new MenuStrip();
             toolStripMenuItem1 = new ToolStripMenuItem();
-            settingsToolStripMenuItem = new ToolStripMenuItem();
             newGameToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             loadGameToolStripMenuItem = new ToolStripMenuItem();
             saveGameToolStripMenuItem = new ToolStripMenuItem();
-            exitToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
-            toolStripSeparator2 = new ToolStripSeparator();
+            exitToolStripMenuItem = new ToolStripMenuItem();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
             smolGameToolStripMenuItem = new ToolStripMenuItem();
             mediumGameToolStripMenuItem = new ToolStripMenuItem();
             bigGameToolStripMenuItem = new ToolStripMenuItem();
@@ -44,6 +44,9 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
+            toolStripStatusLabel4 = new ToolStripStatusLabel();
+            saveFileDialog1 = new SaveFileDialog();
+            openFileDialog1 = new OpenFileDialog();
             menuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -64,109 +67,128 @@
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(54, 29);
             toolStripMenuItem1.Text = "File";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
-            // 
-            // settingsToolStripMenuItem
-            // 
-            settingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { smolGameToolStripMenuItem, mediumGameToolStripMenuItem, bigGameToolStripMenuItem });
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(92, 29);
-            settingsToolStripMenuItem.Text = "Settings";
             // 
             // newGameToolStripMenuItem
             // 
             newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
             newGameToolStripMenuItem.Size = new Size(270, 34);
             newGameToolStripMenuItem.Text = "New game";
+            newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(267, 6);
             // 
             // loadGameToolStripMenuItem
             // 
             loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
             loadGameToolStripMenuItem.Size = new Size(270, 34);
             loadGameToolStripMenuItem.Text = "Load game";
+            loadGameToolStripMenuItem.Click += loadGameToolStripMenuItem_Click;
             // 
             // saveGameToolStripMenuItem
             // 
             saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
             saveGameToolStripMenuItem.Size = new Size(270, 34);
             saveGameToolStripMenuItem.Text = "Save game";
+            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(267, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             exitToolStripMenuItem.Size = new Size(270, 34);
             exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
-            // toolStripSeparator1
+            // settingsToolStripMenuItem
             // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(200, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(200, 6);
+            settingsToolStripMenuItem.Checked = true;
+            settingsToolStripMenuItem.CheckState = CheckState.Checked;
+            settingsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { smolGameToolStripMenuItem, mediumGameToolStripMenuItem, bigGameToolStripMenuItem });
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(92, 29);
+            settingsToolStripMenuItem.Text = "Settings";
             // 
             // smolGameToolStripMenuItem
             // 
             smolGameToolStripMenuItem.Name = "smolGameToolStripMenuItem";
-            smolGameToolStripMenuItem.Size = new Size(270, 34);
+            smolGameToolStripMenuItem.Size = new Size(230, 34);
             smolGameToolStripMenuItem.Text = "Smol game";
+            smolGameToolStripMenuItem.Click += smolGameToolStripMenuItem_Click;
             // 
             // mediumGameToolStripMenuItem
             // 
             mediumGameToolStripMenuItem.Name = "mediumGameToolStripMenuItem";
-            mediumGameToolStripMenuItem.Size = new Size(270, 34);
+            mediumGameToolStripMenuItem.Size = new Size(230, 34);
             mediumGameToolStripMenuItem.Text = "Medium game";
+            mediumGameToolStripMenuItem.Click += mediumGameToolStripMenuItem_Click;
             // 
             // bigGameToolStripMenuItem
             // 
             bigGameToolStripMenuItem.Name = "bigGameToolStripMenuItem";
-            bigGameToolStripMenuItem.Size = new Size(270, 34);
+            bigGameToolStripMenuItem.Size = new Size(230, 34);
             bigGameToolStripMenuItem.Text = "Big game";
+            bigGameToolStripMenuItem.Click += bigGameToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(24, 24);
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripStatusLabel3 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, toolStripStatusLabel2, toolStripStatusLabel3, toolStripStatusLabel4 });
             statusStrip1.Location = new Point(0, 418);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(825, 32);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
-            statusStrip1.ItemClicked += statusStrip1_ItemClicked;
             // 
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(64, 25);
-            toolStripStatusLabel1.Text = "Turns: ";
-            toolStripStatusLabel1.Click += toolStripStatusLabel1_Click;
+            toolStripStatusLabel1.Size = new Size(127, 25);
+            toolStripStatusLabel1.Text = "Current player:";
             // 
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(122, 25);
-            toolStripStatusLabel2.Text = "Elapsed time: ";
+            toolStripStatusLabel2.Size = new Size(58, 25);
+            toolStripStatusLabel2.Text = "White";
             // 
             // toolStripStatusLabel3
             // 
             toolStripStatusLabel3.ImageAlign = ContentAlignment.BottomCenter;
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
             toolStripStatusLabel3.Padding = new Padding(1, 0, 0, 0);
-            toolStripStatusLabel3.Size = new Size(180, 25);
-            toolStripStatusLabel3.Text = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(55, 25);
+            toolStripStatusLabel3.Text = "Time:";
+            // 
+            // toolStripStatusLabel4
+            // 
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new Size(70, 25);
+            toolStripStatusLabel4.Text = "0:00:00";
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
             // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(825, 450);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
+            MaximizeBox = false;
             Name = "GameForm";
-            Text = "               ";
+            Text = "Reversi game";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             statusStrip1.ResumeLayout(false);
@@ -193,5 +215,8 @@
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel toolStripStatusLabel2;
         private ToolStripStatusLabel toolStripStatusLabel3;
+        private ToolStripStatusLabel toolStripStatusLabel4;
+        private SaveFileDialog saveFileDialog1;
+        private OpenFileDialog openFileDialog1;
     }
 }
