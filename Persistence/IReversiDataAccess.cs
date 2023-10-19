@@ -5,8 +5,8 @@ namespace Persistence
 {
     public interface IReversiDataAccess
     {
-        Task<ReversiTable> LoadAsync(String path);
+        Task<(ReversiTable, Int32, Int32, Int32)> LoadAsync(String path);
 
-        Task SaveAsync(String path, ReversiTable table);
+        Task SaveAsync(String path, ReversiTable table, int currentPlayer, int p1Time, int gameTime);
     }
 }

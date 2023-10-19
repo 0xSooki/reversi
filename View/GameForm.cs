@@ -29,8 +29,8 @@ namespace View
             dataAccess = new ReversiFileDataAccess();
             model = new ReversiGameModel(dataAccess);
             model.FieldChanged += new EventHandler<ReversiFieldEventArgs>(Game_FieldChanged);
-            //model.GameAdvanced += new EventHandler<ReversiEventArgs>(Game_GameAdvanced);
-            //model.GameOver += new EventHandler<ReversiEventArgs>(Game_GameOver);
+            model.GameAdvanced += new EventHandler<ReversiEventArgs>(Game_GameAdvanced);
+            model.GameOver += new EventHandler<ReversiEventArgs>(Game_GameOver);
 
             timer = new Timer();
             timer.Interval = 1000;
@@ -41,6 +41,8 @@ namespace View
             model.NewGame();
             SetupTable();
             SetupMenus();
+
+            timer.Start();
         }
 
         #region timer event handlers
@@ -64,7 +66,6 @@ namespace View
 
                 model.Step(x, y);
 
-                toolStripStatusLabel2.Text = model.CurrentPlayer == 1 ? "White" : "Black";
             }
         }
 
@@ -74,6 +75,7 @@ namespace View
 
         private void GenerateTable()
         {
+            RemoveButtonGrid();
             buttonGrid = new Button[model.Table.Size, model.Table.Size];
             for (Int32 i = 0; i < model.Table.Size; i++)
                 for (Int32 j = 0; j < model.Table.Size; j++)
@@ -94,11 +96,25 @@ namespace View
                 }
         }
 
+        private void RemoveButtonGrid()
+        {
+            if (buttonGrid == null) return;
+            for (Int32 i = 0; i < buttonGrid.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < buttonGrid.GetLength(1); j++)
+                {
+                    Controls.Remove(buttonGrid[i, j]);
+                    buttonGrid[i, j].Dispose();
+                }
+            }
+        }
+
+
         private void SetupTable()
         {
             for (Int32 i = 0; i < buttonGrid.GetLength(0); i++)
             {
-                for (Int32 j = 0; j < buttonGrid.GetLength(1); j++)
+                for (Int32 j = 0; j < buttonGrid.GetLength(0); j++)
                 {
                     if (model.Table.GetValue(i, j) == 1)
                     {
@@ -113,7 +129,6 @@ namespace View
                     }
                     else
                     {
-                        buttonGrid[i, j].Text = String.Empty;
                         buttonGrid[i, j].Enabled = true;
                         buttonGrid[i, j].BackColor = Color.Green;
                     }
@@ -146,6 +161,43 @@ namespace View
             }
         }
 
+        private void Game_GameAdvanced(Object? sender, ReversiEventArgs e)
+        {
+            toolStripStatusLabel2.Text = model.CurrentPlayer == 1 ? "White" : "Black";
+            toolStripStatusLabel4.Text = TimeSpan.FromSeconds(e.GameTime).ToString("g");
+        }
+
+        private void Game_GameOver(Object? sender, ReversiEventArgs e)
+        {
+            timer.Stop();
+
+            foreach (Button button in buttonGrid)
+                button.Enabled = false;
+
+            if (e.IsWon) 
+            {
+                Int32 winner = model.GetWinner();
+                if (winner == 0)
+                {
+                    MessageBox.Show("Draw!" + Environment.NewLine +
+                    "Player 1 " +TimeSpan.FromSeconds(e.GameTurnCount).ToString("g") + " play time." + Environment.NewLine +
+                    "Player 2 " + TimeSpan.FromSeconds(e.GameTime).ToString("g") + " play time.",
+                    "Reversi game",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Asterisk);
+                } else
+                {
+                    MessageBox.Show($"Player {winner} won!" + Environment.NewLine +
+                    "Player 1 " + TimeSpan.FromSeconds(e.GameTurnCount).ToString("g") + " play time." + Environment.NewLine +
+                    "Player 2 " + TimeSpan.FromSeconds(e.GameTime).ToString("g") + " play time.",
+                    "Reversi game",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Asterisk);
+                }
+
+            }
+        }
+
         #endregion
 
         #region menu event handlers
@@ -153,8 +205,8 @@ namespace View
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GenerateTable();
             model.NewGame();
+            GenerateTable();
             SetupTable();
 
             timer.Start();
@@ -166,16 +218,19 @@ namespace View
         private void smolGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             model.BoardSize = BoardSize.Smol;
+            SetupMenus();
         }
 
         private void mediumGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             model.BoardSize = BoardSize.Medium;
+            SetupMenus();
         }
 
         private void bigGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             model.BoardSize = BoardSize.Big;
+            SetupMenus();
         }
 
         private void SetupMenus()
@@ -230,10 +285,9 @@ namespace View
                 catch (ReversiDataException)
                 {
                     MessageBox.Show("Loading game failed!" + Environment.NewLine + "Wrong path or file", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                     model.NewGame();
                 }
-
+                GenerateTable();
                 SetupTable();
             }
 

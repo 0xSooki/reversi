@@ -8,21 +8,21 @@ namespace Persistence
 {
     public class ReversiFileDataAccess : IReversiDataAccess
     {
-        public async Task<ReversiTable> LoadAsync(String path)
+        public async Task<(ReversiTable, Int32, Int32, Int32)> LoadAsync(String path)
         {
             try
             {
                 using (StreamReader reader = new StreamReader(path))
                 {
                     String line = await reader.ReadLineAsync() ?? String.Empty;
-                    String[] numbers = line.Split(' ');
-                    Int32 tableSize = Int32.Parse(numbers[0]);
+                    Int32[] nums = line.Split(' ').Select(Int32.Parse).ToArray();
+                    Int32 tableSize = (nums[0]);
                     ReversiTable table = new ReversiTable(tableSize);
 
                     for (Int32 i = 0; i < tableSize; i++)
                     {
                         line = await reader.ReadLineAsync() ?? String.Empty;
-                        numbers = line.Split(' ');
+                        String[] numbers = line.TrimEnd().Split(' ');
 
                         for (Int32 j = 0; j < tableSize; j++)
                         {
@@ -30,7 +30,7 @@ namespace Persistence
                         }
                     }
 
-                    return table;
+                    return (table, nums[1], nums[2], nums[3]);
                 }
             }
             catch
@@ -39,13 +39,16 @@ namespace Persistence
             }
         }
 
-        public async Task SaveAsync(String path, ReversiTable table)
+        public async Task SaveAsync(String path, ReversiTable table,int currentPlayer, int p1Time, int gameTime)
         {
             try
             {
                 using (StreamWriter writer = new StreamWriter(path))
                 {
-                    writer.WriteLine(table.Size);
+                    writer.Write(table.Size + " ");
+                    writer.Write(gameTime + " ");
+                    writer.Write(p1Time + " ");
+                    writer.WriteLine(currentPlayer);
                     for (Int32 i = 0; i < table.Size; i++)
                     {
                         for (Int32 j = 0; j < table.Size; j++)

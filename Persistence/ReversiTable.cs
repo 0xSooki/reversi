@@ -54,6 +54,19 @@ namespace Persistence
             return GetValidMoves(player).Count > 0;
         }
 
+        public Int32 CountPieces(Int32 player)
+        {
+            int sum = 0;
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(0); j++)
+                {
+                    if (board[i,j] == player) sum++;
+                }
+            }
+            return sum;
+        }
+
         public Int32 GetValue(Int32 x, Int32 y)
         {
             if (x < 0 || x >= board.GetLength(0))
@@ -62,17 +75,14 @@ namespace Persistence
                 throw new ArgumentOutOfRangeException(nameof(y), "The Y coordinate is out of range.");
             return board[x, y];
         }
-
+        
         public void SetValue(Int32 x, Int32 y, Int32 value)
         {
             if (x < 0 || x >= board.GetLength(0))
                 throw new ArgumentOutOfRangeException(nameof(x), "The X coordinate is out of range.");
             if (y < 0 || y >= board.GetLength(0))
                 throw new ArgumentOutOfRangeException(nameof(y), "The Y coordinate is out of range.");
-            if (!GetValidMoves(value).Contains((x, y)))
-            {
-                return;
-            }
+
             board[x, y] = value;
         }
 
@@ -175,12 +185,6 @@ namespace Persistence
             }
 
             return validMoves;
-        }
-
-
-        private Boolean GameOver()
-        {
-            return true;
         }
 
         #endregion

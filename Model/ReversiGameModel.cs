@@ -25,9 +25,6 @@ namespace Model
         private BoardSize boardSize;
         private Int32 currentPlayer;
         private Int32 gameTime;
-        private Int32 player1Time;
-        private Int32 player2Time;
-
         private Int32 turnCount;
 
         #endregion
@@ -59,6 +56,8 @@ namespace Model
         {
             get { return boardSize; } set { boardSize = value; }
         }
+
+        public Boolean IsGameOver { get { return ((table.GetValidMoves(1).Count == 0 && table.GetValidMoves(2).Count == 0) || table.IsFilled); } }
 
         #endregion
 
@@ -106,17 +105,32 @@ namespace Model
 
         public void AdvanceTime()
         {
-            if (GameOver != null)
+            if (table.IsFilled)
+                return;
+            if (CurrentPlayer == 1)
             {
-                if (table.IsFilled)
-                {
-                    GameOver(this, new ReversiEventArgs(false, gameTime, turnCount));
-                }
+                turnCount++;
             }
+            gameTime++;
+            OnGameAdvanced();
+        }
+
+        public Int32 GetWinner()
+        {
+            if (!IsGameOver) return -1;
+            Int32 p1 = table.CountPieces(1);
+            Int32 p2 = table.CountPieces(2);
+            if (p1 > p2) return 1;
+            if (p2 > p1) return 2;
+            return 0;
         }
 
         public void Step(Int32 x, Int32 y)
         {
+            if (IsGameOver)
+            {
+                return;
+            }
 
             if (table[x, y] != 0)
             {
@@ -148,9 +162,6 @@ namespace Model
                 OnFieldChanged(value.Item1, value.Item2);
             }
 
-
-            
-
             if (currentPlayer == 1 && table.CanPlayValidMove(2))
             {
                 currentPlayer = 2;
@@ -163,11 +174,12 @@ namespace Model
                     GameOver(this, new ReversiEventArgs(false, gameTime, currentPlayer));
                 }
             }
-            turnCount++;
-
-
 
             OnGameAdvanced();
+            if (IsGameOver)
+            {
+                OnGameOver(true);
+            }
         }
 
         public async Task SaveGameAsync(String path)
@@ -175,7 +187,7 @@ namespace Model
             if (dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            await dataAccess.SaveAsync(path, table);
+            await dataAccess.SaveAsync(path, table, currentPlayer, turnCount, gameTime);
         }
 
         public async Task LoadGameAsync(String path)
@@ -183,8 +195,12 @@ namespace Model
             if (dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            table = await dataAccess.LoadAsync(path);
+             (ReversiTable, int, int, int) data = await dataAccess.LoadAsync(path);
 
+            table = data.Item1;
+            currentPlayer = data.Item4;
+            turnCount = data.Item3;
+            gameTime = data.Item2;
 
             switch (BoardSize)
             {
@@ -214,6 +230,12 @@ namespace Model
         {
             GameAdvanced?.Invoke(this, new ReversiEventArgs(false, gameTime, currentPlayer));
         }
+
+        private void OnGameOver(Boolean isWon)
+        {
+            GameOver?.Invoke(this, new ReversiEventArgs(isWon, gameTime-turnCount, turnCount));
+        }
+
 
         #endregion
     }
