@@ -162,16 +162,20 @@ namespace Model
                 OnFieldChanged(value.Item1, value.Item2);
             }
 
-            if (currentPlayer == 1 && table.CanPlayValidMove(2))
+            if (currentPlayer == 1)
             {
+                if ( table.CanPlayValidMove(2))
                 currentPlayer = 2;
+                else currentPlayer = 1;
             }
-            else if (currentPlayer == 2 && table.CanPlayValidMove(1))
+            else if (currentPlayer == 2)
             {
-                currentPlayer = 1;
+                if (table.CanPlayValidMove(1))
+                    currentPlayer = 1;
+                else currentPlayer = 2;
             } else {                 if (GameOver != null)
                 {
-                    GameOver(this, new ReversiEventArgs(false, gameTime, currentPlayer));
+                    GameOver(this, new ReversiEventArgs(true, gameTime, turnCount));
                 }
             }
 

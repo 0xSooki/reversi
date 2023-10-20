@@ -86,10 +86,6 @@ namespace Persistence
             board[x, y] = value;
         }
 
-        #endregion
-
-        #region private methods
-
         public void Flip(List<(int, int)> piecesToFlip, int player)
         {
             foreach ((int, int) piece in piecesToFlip)
@@ -188,6 +184,5 @@ namespace Persistence
         }
 
         #endregion
-
     }
 }

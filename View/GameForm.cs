@@ -19,7 +19,6 @@ namespace View
         private ReversiGameModel model = null!;
         private Button[,] buttonGrid = null!;
         private Timer timer = null!;
-        private Timer timer2 = null!;
 
         #endregion
         public GameForm()
@@ -212,9 +211,6 @@ namespace View
             timer.Start();
         }
 
-        #endregion
-
-
         private void smolGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             model.BoardSize = BoardSize.Smol;
@@ -294,5 +290,7 @@ namespace View
             if (restartTimer)
                 timer.Start();
         }
+
+        #endregion
     }
 }
