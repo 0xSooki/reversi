@@ -84,6 +84,9 @@ namespace Model
 
         #region public methods
 
+        /// <summary>
+        /// Creates new game with the selected board size
+        /// </summary>
         public void NewGame()
         {
             currentPlayer = 1;
@@ -115,6 +118,10 @@ namespace Model
             OnGameAdvanced();
         }
 
+        /// <summary>
+        /// return the winner based on the number of collected pieces
+        /// </summary>
+        /// <returns>1 or 2 for wins and 0 for draw and -1 when the game is not over</returns>
         public Int32 GetWinner()
         {
             if (!IsGameOver) return -1;
@@ -125,6 +132,11 @@ namespace Model
             return 0;
         }
 
+        /// <summary>
+        /// makes a valid step on the board
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void Step(Int32 x, Int32 y)
         {
             if (IsGameOver)
@@ -173,7 +185,8 @@ namespace Model
                 if (table.CanPlayValidMove(1))
                     currentPlayer = 1;
                 else currentPlayer = 2;
-            } else {                 if (GameOver != null)
+            } else {                 
+                if (GameOver != null)
                 {
                     GameOver(this, new ReversiEventArgs(true, gameTime, turnCount));
                 }
@@ -232,7 +245,7 @@ namespace Model
 
         private void OnGameAdvanced()
         {
-            GameAdvanced?.Invoke(this, new ReversiEventArgs(false, gameTime, currentPlayer));
+            GameAdvanced?.Invoke(this, new ReversiEventArgs(false, gameTime, turnCount));
         }
 
         private void OnGameOver(Boolean isWon)

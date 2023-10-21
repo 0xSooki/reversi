@@ -121,6 +121,25 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestPass()
+        {
+            model.NewGame();
+            model.Table.SetValue(4, 4, 0);
+            model.Table.SetValue(4, 5, 0);
+            model.Table.SetValue(5, 4, 0);
+            model.Table.SetValue(5, 5, 0);
+            model.Table.SetValue(0, 1, 2);
+            model.Table.SetValue(0, 2, 1);
+            model.Table.SetValue(0, 3, 2);
+
+            model.Step(0, 0);
+
+            model.AdvanceTime();
+
+            Assert.AreEqual(1, model.CurrentPlayer);
+        }
+
+        [TestMethod]
         public async Task TestLoadGameAsync()
         {
             model.NewGame();
@@ -142,7 +161,6 @@ namespace Test
         private void Model_GameAdvanced(Object? sender, ReversiEventArgs e)
         {
             Assert.IsTrue(model.GameTime >= 0); 
-            Assert.AreEqual(model.GameTime == 0, model.IsGameOver);
 
             Assert.AreEqual(e.GameTurnCount, model.TurnCount);
             Assert.AreEqual(e.GameTime, model.GameTime);

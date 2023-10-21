@@ -173,18 +173,19 @@ namespace View
             foreach (Button button in buttonGrid)
                 button.Enabled = false;
 
-            if (e.IsWon) 
+            if (e.IsWon)
             {
                 Int32 winner = model.GetWinner();
                 if (winner == 0)
                 {
                     MessageBox.Show("Draw!" + Environment.NewLine +
-                    "Player 1 " +TimeSpan.FromSeconds(e.GameTurnCount).ToString("g") + " play time." + Environment.NewLine +
+                    "Player 1 " + TimeSpan.FromSeconds(e.GameTurnCount).ToString("g") + " play time." + Environment.NewLine +
                     "Player 2 " + TimeSpan.FromSeconds(e.GameTime).ToString("g") + " play time.",
                     "Reversi game",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Asterisk);
-                } else
+                }
+                else
                 {
                     MessageBox.Show($"Player {winner} won!" + Environment.NewLine +
                     "Player 1 " + TimeSpan.FromSeconds(e.GameTurnCount).ToString("g") + " play time." + Environment.NewLine +
