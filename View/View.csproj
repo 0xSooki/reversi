@@ -9,17 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Images\black.png" />
-    <None Remove="Resources\Images\white.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\black.png" />
-    <EmbeddedResource Include="Resources\Images\white.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ELTE.EVA.SARuleSet" Version="2.0.0">
+    <PackageReference Include="ELTE.EVA.SARuleSet" Version="2.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

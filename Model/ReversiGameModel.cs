@@ -91,6 +91,7 @@ namespace Model
         {
             currentPlayer = 1;
             turnCount = 0;
+            gameTime = 0;
 
             switch (boardSize)
             {

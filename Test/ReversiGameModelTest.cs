@@ -114,7 +114,6 @@ namespace Test
         {
             model.NewGame();
 
-            Int32 time = model.GameTime;
             model.AdvanceTime();
 
             Assert.AreEqual(1, model.GameTime);
