@@ -67,6 +67,8 @@ namespace Model
 
         public event EventHandler<ReversiEventArgs>? GameOver;
 
+        public event EventHandler<ReversiEventArgs>? GameCreated;
+
         public event EventHandler<ReversiEventArgs>? GameAdvanced;
 
         #endregion
@@ -91,6 +93,7 @@ namespace Model
         {
             currentPlayer = 1;
             turnCount = 0;
+            gameTime = 0;
 
             switch (boardSize)
             {
@@ -104,6 +107,7 @@ namespace Model
                     table = new ReversiTable(FieldCountMedium);
                     break;
             }
+            OnGameCreated();
         }
 
         public void AdvanceTime()
@@ -251,6 +255,11 @@ namespace Model
         private void OnGameOver(Boolean isWon)
         {
             GameOver?.Invoke(this, new ReversiEventArgs(isWon, gameTime-turnCount, turnCount));
+        }
+
+        private void OnGameCreated()
+        {
+            GameCreated?.Invoke(this, new ReversiEventArgs(false, gameTime, turnCount));
         }
 
 
