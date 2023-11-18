@@ -57,6 +57,7 @@ namespace View
 
         private void ButtonGrid_MouseClick(Object? sender, MouseEventArgs e)
         {
+            if (!timer.Enabled) return;
             if (sender is Button button)
             {
 
@@ -163,7 +164,8 @@ namespace View
         private void Game_GameAdvanced(Object? sender, ReversiEventArgs e)
         {
             toolStripStatusLabel2.Text = model.CurrentPlayer == 1 ? "White" : "Black";
-            toolStripStatusLabel4.Text = TimeSpan.FromSeconds(e.GameTime).ToString("g");
+            toolStripStatusLabel4.Text = TimeSpan.FromSeconds(e.GameTurnCount).ToString("g");
+            toolStripStatusLabel6.Text = TimeSpan.FromSeconds(e.GameTime - e.GameTurnCount).ToString("g");
         }
 
         private void Game_GameOver(Object? sender, ReversiEventArgs e)
@@ -209,6 +211,7 @@ namespace View
             GenerateTable();
             SetupTable();
 
+            timer.Stop();
             timer.Start();
         }
 
@@ -293,5 +296,20 @@ namespace View
         }
 
         #endregion
+
+        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (timer.Enabled)
+            {
+                pauseToolStripMenuItem.Text = "Continue";
+                timer.Stop();
+            } else
+            {
+                pauseToolStripMenuItem.Text = "Pause";
+                timer.Start();
+            }
+
+
+        }
     }
 }
