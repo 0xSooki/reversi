@@ -1,4 +1,4 @@
-﻿namespace View
+﻿namespace ViewWF
 {
     partial class GameForm
     {

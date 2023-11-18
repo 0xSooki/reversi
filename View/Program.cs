@@ -1,4 +1,4 @@
-namespace View
+namespace ViewWF
 {
     internal static class Program
     {

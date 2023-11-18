@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
-namespace View
+namespace ViewWF
 {
     public partial class GameForm : Form
     {
