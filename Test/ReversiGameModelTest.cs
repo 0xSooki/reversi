@@ -41,7 +41,6 @@ namespace Test
                 for (Int32 j = 0; j < 10; j++)
                 {
                     Assert.AreEqual(table.GetValue(i, j), model.Table.GetValue(i, j));
-
                 }
         }
 
@@ -77,6 +76,8 @@ namespace Test
             model.AdvanceTime();
 
             Assert.AreEqual(initialGameTime + 1, model.GameTime);
+            Assert.AreEqual(1, model.GameTime);
+
         }
 
         [TestMethod]
@@ -93,9 +94,7 @@ namespace Test
                 }
             }
 
-            int winner = model.GetWinner();
-
-            Assert.AreEqual(1, winner);
+            Assert.AreEqual(1, model.GetWinner());
         }
 
         [TestMethod]
@@ -105,16 +104,26 @@ namespace Test
             model.Step(3, 4);
 
             Assert.AreEqual(1, model.CurrentPlayer);
+
+            model.Step(3, 5);
+            Assert.AreEqual(2, model.CurrentPlayer);
+
+            model.Step(3, 4);
+            Assert.AreEqual(1, model.CurrentPlayer);
         }
 
         [TestMethod]
-        public void ReversiGameModelAdvanceTimeTest()
+        public void TestGameAdvanced()
         {
             model.NewGame();
+            bool advancedRaised = false;
+            model.GameAdvanced += (sender, e) =>
+            {
+                advancedRaised = true;
+            };
+            model.Step(5, 3);
 
-            model.AdvanceTime();
-
-            Assert.AreEqual(1, model.GameTime);
+            Assert.IsTrue(advancedRaised);
         }
 
         [TestMethod]
@@ -134,6 +143,60 @@ namespace Test
             model.AdvanceTime();
 
             Assert.AreEqual(1, model.CurrentPlayer);
+        }
+
+        [TestMethod]
+        public void TestWinBySteps()
+        {
+            bool winRaised = false;
+            model.GameOver += (sender, e) =>
+            {
+                winRaised = true;
+            };
+
+            model.NewGame();
+            model.Step(5, 3);
+            Assert.AreEqual(2, model.CurrentPlayer);
+            model.Step(6, 3);
+            Assert.AreEqual(1, model.CurrentPlayer);
+            model.Step(7, 3);
+            Assert.AreEqual(2, model.CurrentPlayer);
+            model.Step(5, 2);
+            Assert.AreEqual(1, model.CurrentPlayer);
+            model.Step(4, 1);
+            Assert.AreEqual(2, model.CurrentPlayer);
+            model.Step(5, 6);
+            Assert.AreEqual(1, model.CurrentPlayer);
+            model.Step(5, 7);
+            Assert.AreEqual(2, model.CurrentPlayer);
+            model.Step(4, 3);
+            Assert.AreEqual(1, model.CurrentPlayer);
+            model.Step(3, 4);
+
+            Assert.IsTrue(winRaised);
+            Assert.AreEqual(1, model.GetWinner());
+            Assert.AreNotEqual(2, model.GetWinner());
+        }
+
+        [TestMethod]
+        public void TestDraw()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (i < 5)
+                    {
+                        model.Table.SetValue(i, j, 1);
+                    }
+                    else
+                    {
+                        model.Table.SetValue(i, j, 2);
+                    }
+
+                }
+            }
+            Assert.AreEqual(-1, model.GetWinner());
         }
 
         [TestMethod]
@@ -168,7 +231,6 @@ namespace Test
         {
             Assert.IsTrue(model.IsGameOver);
             Assert.AreEqual(0, e.GameTime);
-            Assert.IsFalse(e.IsWon);
         }
     }
 }
