@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Model
+﻿namespace Model
 {
     public class ReversiEventArgs : EventArgs
     {
@@ -14,7 +12,7 @@ namespace Model
 
         public Boolean IsWon { get { return isWon; } }
 
-        public ReversiEventArgs (Boolean _isWon, Int32 _gameTime, Int32 _turnCount)
+        public ReversiEventArgs(Boolean _isWon, Int32 _gameTime, Int32 _turnCount)
         {
             gameTime = _gameTime;
             isWon = _isWon;

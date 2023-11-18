@@ -1,11 +1,7 @@
 ﻿using Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace ViewWPF
 {
@@ -14,6 +10,7 @@ namespace ViewWPF
         #region Fields
 
         private ReversiGameModel _model;
+        private bool _isPaused;
 
         #endregion
 
@@ -27,7 +24,21 @@ namespace ViewWPF
 
         public DelegateCommand ExitCommand { get; private set; }
 
+        public DelegateCommand PauseGameCommand { get; private set; }
+
         public ObservableCollection<ReversiField> Fields { get; set; }
+
+        public String IsPaused { get { return _isPaused ? "Continue" : "Pause"; } }
+
+        public bool Paused
+        {
+            get { return _isPaused; }
+            set
+            {
+                _isPaused = value;
+                OnPropertyChanged(nameof(IsPaused));
+            }
+        }
 
         public String CurrentPlayer
         {
@@ -110,16 +121,23 @@ namespace ViewWPF
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
             ExitCommand = new DelegateCommand(param => OnExit());
+            PauseGameCommand = new DelegateCommand(param => OnPause());
 
             Fields = new ObservableCollection<ReversiField>();
             for (Int32 i = 0; i < _model.Table.Size; i++)
             {
-                for (Int32 j = 0; j< _model.Table.Size; j++)
+                for (Int32 j = 0; j < _model.Table.Size; j++)
                 {
-                    Fields.Add(new ReversiField { X = i, Y = j, Player = _model.Table[i, j], StepCommand = new DelegateCommand(param =>
+                    Fields.Add(new ReversiField
+                    {
+                        X = i,
+                        Y = j,
+                        Player = _model.Table[i, j],
+                        StepCommand = new DelegateCommand(param =>
                     {
                         if (param is Tuple<Int32, Int32> pos) StepGame(pos.Item1, pos.Item2);
-                    }) });
+                    })
+                    });
                 }
             }
 
@@ -133,9 +151,10 @@ namespace ViewWPF
         private void StepGame(Int32 x, Int32 y)
         {
             _model.Step(x, y);
+            OnPropertyChanged(nameof(CurrentPlayer));
         }
 
-        private void RefreshTable()
+        public void RefreshTable()
         {
             Fields = new ObservableCollection<ReversiField>();
             for (Int32 i = 0; i < _model.Table.Size; i++)
@@ -153,7 +172,7 @@ namespace ViewWPF
                         })
                     };
                     Fields.Add(field);
-                    
+
 
                 }
             }
@@ -172,13 +191,13 @@ namespace ViewWPF
         {
             ReversiField field = Fields.Single(f => f.X == e.X && f.Y == e.Y);
 
-            field.Player = _model.Table[field.X, field.Y] == 0 ?  0 : _model.Table[field.X, field.Y];
+            field.Player = _model.Table[field.X, field.Y] == 0 ? 0 : _model.Table[field.X, field.Y];
             OnPropertyChanged(nameof(TurnCount));
-        }   
+        }
 
         private void Model_GameOver(object? sender, EventArgs e)
         {
-        }   
+        }
 
         private void Model_GameAdvanced(object? sender, EventArgs e)
         {
@@ -191,9 +210,10 @@ namespace ViewWPF
             RefreshTable();
         }
 
+
         #endregion
 
-        #region Events
+        #region Events handlers
 
         public event EventHandler? NewGame;
 
@@ -202,6 +222,8 @@ namespace ViewWPF
         public event EventHandler? SaveGame;
 
         public event EventHandler? ExitGame;
+
+        public event EventHandler? PauseGame;
 
         #endregion
 
@@ -225,6 +247,11 @@ namespace ViewWPF
         private void OnExit()
         {
             ExitGame?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnPause()
+        {
+            PauseGame?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

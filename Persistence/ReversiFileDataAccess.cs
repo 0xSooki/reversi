@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Persistence
+﻿namespace Persistence
 {
     public class ReversiFileDataAccess : IReversiDataAccess
     {
@@ -39,7 +33,7 @@ namespace Persistence
             }
         }
 
-        public async Task SaveAsync(String path, ReversiTable table,int currentPlayer, int p1Time, int gameTime)
+        public async Task SaveAsync(String path, ReversiTable table, int currentPlayer, int p1Time, int gameTime)
         {
             try
             {

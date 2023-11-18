@@ -22,7 +22,7 @@
                 <MenuItem Header="Medium Game" IsCheckable="True" IsChecked="{Binding IsGameMedium}"/>
                 <MenuItem Header="Big Game" IsCheckable="True" IsChecked="{Binding IsGameBig}"/>
             </MenuItem>
-            <MenuItem Header="Pause" />
+            <MenuItem Header="{Binding IsPaused}" Command="{Binding PauseGameCommand}"/>
         </Menu>
 
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Fields}">

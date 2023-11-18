@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ViewWPF
 {
@@ -31,7 +27,7 @@ namespace ViewWPF
             }
         }
 
-            public DelegateCommand? StepCommand { get; set; }
+        public DelegateCommand? StepCommand { get; set; }
 
     }
 }

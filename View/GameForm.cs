@@ -1,11 +1,5 @@
 using Model;
 using Persistence;
-using System;
-using System.Diagnostics.Eventing.Reader;
-using System.IO.Packaging;
-using System.Runtime.Versioning;
-using System.Security.AccessControl;
-using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ViewWF
@@ -303,7 +297,8 @@ namespace ViewWF
             {
                 pauseToolStripMenuItem.Text = "Continue";
                 timer.Stop();
-            } else
+            }
+            else
             {
                 pauseToolStripMenuItem.Text = "Pause";
                 timer.Start();

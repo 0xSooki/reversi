@@ -1,9 +1,4 @@
 ﻿using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Model
 {
@@ -54,7 +49,8 @@ namespace Model
 
         public BoardSize BoardSize
         {
-            get { return boardSize; } set { boardSize = value; }
+            get { return boardSize; }
+            set { boardSize = value; }
         }
 
         public Boolean IsGameOver { get { return ((table.GetValidMoves(1).Count == 0 && table.GetValidMoves(2).Count == 0) || table.IsFilled); } }
@@ -155,7 +151,7 @@ namespace Model
 
             if (GameOver != null)
             {
-                   if (table.IsFilled)
+                if (table.IsFilled)
                 {
                     GameOver(this, new ReversiEventArgs(false, gameTime, turnCount));
                 }
@@ -180,8 +176,8 @@ namespace Model
 
             if (currentPlayer == 1)
             {
-                if ( table.CanPlayValidMove(2))
-                currentPlayer = 2;
+                if (table.CanPlayValidMove(2))
+                    currentPlayer = 2;
                 else currentPlayer = 1;
             }
             else if (currentPlayer == 2)
@@ -189,7 +185,9 @@ namespace Model
                 if (table.CanPlayValidMove(1))
                     currentPlayer = 1;
                 else currentPlayer = 2;
-            } else {                 
+            }
+            else
+            {
                 if (GameOver != null)
                 {
                     GameOver(this, new ReversiEventArgs(true, gameTime, turnCount));
@@ -216,7 +214,7 @@ namespace Model
             if (dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-             (ReversiTable, int, int, int) data = await dataAccess.LoadAsync(path);
+            (ReversiTable, int, int, int) data = await dataAccess.LoadAsync(path);
 
             table = data.Item1;
             currentPlayer = data.Item4;
@@ -254,7 +252,7 @@ namespace Model
 
         private void OnGameOver(Boolean isWon)
         {
-            GameOver?.Invoke(this, new ReversiEventArgs(isWon, gameTime-turnCount, turnCount));
+            GameOver?.Invoke(this, new ReversiEventArgs(isWon, gameTime - turnCount, turnCount));
         }
 
         private void OnGameCreated()

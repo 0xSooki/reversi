@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Persistence
+﻿namespace Persistence
 {
     public class ReversiTable
     {
@@ -71,7 +64,7 @@ namespace Persistence
             {
                 for (int j = 0; j < board.GetLength(0); j++)
                 {
-                    if (board[i,j] == player) sum++;
+                    if (board[i, j] == player) sum++;
                 }
             }
             return sum;
@@ -92,7 +85,7 @@ namespace Persistence
                 throw new ArgumentOutOfRangeException(nameof(y), "The Y coordinate is out of range.");
             return board[x, y];
         }
-        
+
         /// <summary>
         /// setter for value at given x and y
         /// </summary>
@@ -146,21 +139,21 @@ namespace Persistence
                 while (currX >= 0 && currX < board.GetLength(0) && currY >= 0 && currY < board.GetLength(0))
                 {
                     if (board[currX, currY] == 0)
-                        break; 
+                        break;
 
                     if (board[currX, currY] == player)
                     {
                         if (found)
                         {
-                            piecesToFlip.AddRange(piecesInDirection); 
+                            piecesToFlip.AddRange(piecesInDirection);
                         }
                         break;
                     }
 
                     if (board[currX, currY] == 3 - player)
                     {
-                        found = true; 
-                        piecesInDirection.Add((currX, currY)); 
+                        found = true;
+                        piecesInDirection.Add((currX, currY));
                     }
 
                     currX += dx[dir];
@@ -199,13 +192,13 @@ namespace Persistence
                         while (currX >= 0 && currX < board.GetLength(0) && currY >= 0 && currY < board.GetLength(0))
                         {
                             if (board[currX, currY] == 0)
-                                break; 
+                                break;
 
                             if (board[currX, currY] == player)
                             {
                                 if (found)
-                                    validMoves.Add((x, y)); 
-                                break; 
+                                    validMoves.Add((x, y));
+                                break;
                             }
 
                             if (board[currX, currY] == 3 - player)

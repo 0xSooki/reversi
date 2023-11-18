@@ -1,10 +1,6 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Model;
-using Persistence;
-using System;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Persistence;
 
 namespace Test
 {
@@ -32,7 +28,8 @@ namespace Test
         }
 
         [TestMethod]
-        public void TestNewGame() { 
+        public void TestNewGame()
+        {
             model.NewGame();
 
             Assert.AreEqual(0, model.GameTime);
@@ -49,7 +46,8 @@ namespace Test
         }
 
         [TestMethod]
-        public void TestSmolGame() {
+        public void TestSmolGame()
+        {
             model.BoardSize = BoardSize.Smol;
             model.NewGame();
             Assert.AreEqual(10, model.Table.Size);
@@ -159,7 +157,7 @@ namespace Test
 
         private void Model_GameAdvanced(Object? sender, ReversiEventArgs e)
         {
-            Assert.IsTrue(model.GameTime >= 0); 
+            Assert.IsTrue(model.GameTime >= 0);
 
             Assert.AreEqual(e.GameTurnCount, model.TurnCount);
             Assert.AreEqual(e.GameTime, model.GameTime);
@@ -168,7 +166,7 @@ namespace Test
 
         private void Model_GameOver(Object? sender, ReversiEventArgs e)
         {
-            Assert.IsTrue(model.IsGameOver); 
+            Assert.IsTrue(model.IsGameOver);
             Assert.AreEqual(0, e.GameTime);
             Assert.IsFalse(e.IsWon);
         }

@@ -2,12 +2,6 @@
 using Model;
 using Persistence;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -49,6 +43,7 @@ namespace ViewWPF
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame);
             _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
             _viewModel.ExitGame += new EventHandler(ViewModel_ExitGame);
+            _viewModel.PauseGame += new EventHandler(ViewModel_PauseGame);
 
             _view = new MainWindow();
             _view.DataContext = _viewModel;
@@ -100,7 +95,7 @@ namespace ViewWPF
 
         private async void ViewModel_LoadGame(object? sender, EventArgs e)
         {
-            bool restart= _timer.IsEnabled;
+            bool restart = _timer.IsEnabled;
             _timer.Stop();
 
             try
@@ -113,6 +108,7 @@ namespace ViewWPF
                     await _model.LoadGameAsync(openFileDialog.FileName);
 
                     _timer.Start();
+
                 }
             }
             catch (ReversiDataException)
@@ -124,6 +120,7 @@ namespace ViewWPF
             {
                 _timer.Start();
             }
+            _viewModel.RefreshTable();
         }
 
         private async void ViewModel_SaveGame(object? sender, EventArgs e)
@@ -147,18 +144,36 @@ namespace ViewWPF
                         MessageBox.Show("Error saving game.", "Reversi", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-            } catch
+            }
+            catch
             {
                 MessageBox.Show("Error saving game.", "Reversi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if (restart) {                 _timer.Start();
-                       }
+            if (restart)
+            {
+                _timer.Start();
+            }
         }
 
         private void ViewModel_ExitGame(object? sender, EventArgs e)
         {
             _view.Close();
+        }
+
+        private void ViewModel_PauseGame(object? sender, EventArgs e)
+        {
+            if (_timer.IsEnabled)
+            {
+                _viewModel.Paused = true;
+                _timer.Stop();
+            }
+            else
+            {
+                _viewModel.Paused = false;
+                _timer.Start();
+            }
+
         }
 
         #endregion
