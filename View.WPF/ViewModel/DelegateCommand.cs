@@ -10,6 +10,12 @@ namespace ViewWPF
 
         public DelegateCommand(Action<Object?> execute) : this(null, execute) { }
 
+        /// <summary>
+        /// Create command
+        /// </summary>
+        /// <param name="canExecute"></param>
+        /// <param name="execute"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public DelegateCommand(Func<Object?, Boolean>? canExecute, Action<Object?> execute)
         {
             if (execute == null)
@@ -23,12 +29,21 @@ namespace ViewWPF
 
         public event EventHandler? CanExecuteChanged;
 
-
+        /// <summary>
+        /// Executeable check
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public Boolean CanExecute(Object? parameter)
         {
             return _canExecute == null ? true : _canExecute(parameter);
         }
 
+        /// <summary>
+        /// Execute command
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public void Execute(Object? parameter)
         {
             if (!CanExecute(parameter))

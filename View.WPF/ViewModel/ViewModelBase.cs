@@ -8,8 +8,15 @@ namespace ViewWPF
     {
         protected ViewModelBase() { }
 
+        /// <summary>
+        /// Property changed event
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Attribute change with check
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected virtual void OnPropertyChanged([CallerMemberName] String? propertyName = null)
         {
             if (PropertyChanged != null)
