@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ReversiMaui.View.GamePage"
+             Title="GamePage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Orientation="Horizontal">
+            <Button Text="New Game" Command="{Binding NewGameCommand}" Grid.Row="0" HorizontalOptions="Start"/>
+            <Button Text="{Binding IsPaused}" Command="{Binding PauseGameCommand}" Grid.Row="0" />
+        </StackLayout>
+
+        <Button Text="Settings" Command="{Binding ExitCommand}" Grid.Row="0" HorizontalOptions="End" />
+
+        <Grid
+            Grid.Row="1"
+            BindableLayout.ItemsSource="{Binding Fields}"
+            RowDefinitions="{Binding GameTableRows}"
+            ColumnDefinitions="{Binding GameTableColumns}">
+
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Grid.Row="{Binding Y}"
+                        Grid.Column="{Binding X}"
+                        Command="{Binding StepCommand}"
+                        CommandParameter="{Binding XY}"
+                        BackgroundColor="{Binding Color}"
+                        Padding="0"
+                        FontAttributes="Bold"
+                        FontSize="Micro"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </Grid>
+
+        <HorizontalStackLayout HorizontalOptions="Start" Grid.Row="2">
+            <Label Text="Current: " />
+            <Label Text="{Binding CurrentPlayer}" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout HorizontalOptions="End" Grid.Row="2">
+            <Label Text="P1: " />
+            <Label Text="{Binding GameTime}" />
+            <Label Text=" | P2: " />
+            <Label Text="{Binding TurnCount}" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

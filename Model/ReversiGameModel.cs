@@ -233,6 +233,8 @@ namespace Model
                     boardSize = BoardSize.Big;
                     break;
             }
+
+            OnGameCreated();
         }
 
         #endregion

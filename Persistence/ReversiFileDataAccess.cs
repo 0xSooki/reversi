@@ -2,8 +2,17 @@
 {
     public class ReversiFileDataAccess : IReversiDataAccess
     {
+        private String? _directory = String.Empty;
+
+        public ReversiFileDataAccess(String? saveDirectory = null)
+        {
+            _directory = saveDirectory;
+        }
         public async Task<(ReversiTable, Int32, Int32, Int32)> LoadAsync(String path)
         {
+            if (!String.IsNullOrEmpty(_directory))
+                path = Path.Combine(_directory, path);
+
             try
             {
                 using (StreamReader reader = new StreamReader(path))
@@ -35,6 +44,9 @@
 
         public async Task SaveAsync(String path, ReversiTable table, int currentPlayer, int p1Time, int gameTime)
         {
+            if (!String.IsNullOrEmpty(_directory))
+                path = Path.Combine(_directory, path);
+
             try
             {
                 using (StreamWriter writer = new StreamWriter(path))
